@@ -45,7 +45,12 @@ if isTrue "${DEBUG_AUTOPAUSE}"; then
   knockdArgs+=(-D)
 fi
 
-sudo /usr/local/sbin/knockd "${knockdArgs[@]}"
+if isTrue "${SKIP_SUDO}"; then
+  /usr/local/sbin/knockd "${knockdArgs[@]}"
+else
+  sudo /usr/local/sbin/knockd "${knockdArgs[@]}"
+fi
+
 if [ $? -ne 0 ] ; then
   logAutopause "Failed to start knockd daemon."
   logAutopause "Probable cause: Unable to attach to interface \"$AUTOPAUSE_KNOCK_INTERFACE\"."
@@ -124,11 +129,7 @@ do
         STATE=E
       else
         TIME_THRESH=$(($(current_uptime)+$AUTOPAUSE_TIMEOUT_KN))
-        from=unknown
-        if [ -e /var/log/knocked-source ]; then
-          from=$(cat /var/log/knocked-source)
-        fi
-        logAutopause "Server was knocked from $from - waiting for clients or timeout"
+        logAutopause "Server was knocked - waiting for clients or timeout"
         STATE=K
       fi
     fi

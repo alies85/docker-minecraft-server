@@ -29,6 +29,11 @@ apt-get install -y \
   libpcap0.8 \
   webp
 
+curl -s https://packagecloud.io/install/repositories/github/git-lfs/script.deb.sh | sudo bash
+apt-get update
+apt-get install -y \
+  git-lfs
+
 apt-get clean
 
 # Patched knockd
@@ -37,3 +42,6 @@ tar -xf /tmp/knock.tar.gz -C /usr/local/ && rm /tmp/knock.tar.gz
 ln -s /usr/local/sbin/knockd /usr/sbin/knockd
 setcap cap_net_raw=ep /usr/local/sbin/knockd
 find /usr/lib -name 'libpcap.so.0.8' -execdir cp '{}' libpcap.so.1 \;
+
+# Set git credentials
+echo -e "[user]\n	name = Minecraft Server on Docker\n	email = server@example.com" >> /etc/gitconfig

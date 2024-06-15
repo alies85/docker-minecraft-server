@@ -18,13 +18,15 @@ enabled=1
 EOF
 dnf update -y
 
-dnf install -y ImageMagick \
+dnf install -y \
+  ImageMagick \
   file \
   sudo \
   net-tools \
   iputils \
   curl \
   git \
+  git-lfs \
   jq \
   dos2unix \
   mysql \
@@ -40,6 +42,11 @@ dnf install -y ImageMagick \
   findutils \
   which
 
+curl -s https://packagecloud.io/install/repositories/github/git-lfs/script.rpm.sh | sudo bash
+dnf update -y
+dnf install -y \
+  git-lfs
+
 bash /build/ol/install-gosu.sh
 
 # Patched knockd
@@ -47,3 +54,6 @@ curl -fsSL -o /tmp/knock.tar.gz https://github.com/Metalcape/knock/releases/down
 tar -xf /tmp/knock.tar.gz -C /usr/local/ && rm /tmp/knock.tar.gz
 ln -s /usr/local/sbin/knockd /usr/sbin/knockd
 setcap cap_net_raw=ep /usr/local/sbin/knockd
+
+# Set git credentials
+echo -e "[user]\n       name = Minecraft Server on Docker\n     email = server@example.com" >> /etc/gitconfig

@@ -4,7 +4,9 @@ If you prefer to manually manage the `server.properties` file, set `OVERRIDE_SER
 
 !!! note
   
-    To clear a server property, set the variable to an empty string, such as `-e RESOURCE_PACK=""`. An unset variable is ignored and the existing `server.property` is left unchanged.
+    To clear a server property, set the variable to an empty string, such as `-e RESOURCE_PACK=""`. An unset variable is ignored and the existing server property is left unchanged.
+
+To see what `server.properties` will get used by the server, set the environment variable `DUMP_SERVER_PROPERTIES` to "true" and the contents of `server.properties` will get output before the server starts.
 
 ## Placeholders
 
@@ -62,9 +64,25 @@ The section symbol (§) and other unicode characters are automatically converted
     
     ![](../img/motd-example.png)
 
-To produce a multi-line MOTD, embed a newline character as `\n` in the string, such as
+To produce a multi-line MOTD, embed a newline character as `\n` in the string, such as the following example.
 
+!!! example "Multi-line MOTD"
+
+    With `docker run`
+    
+    ```
     -e MOTD="Line one\nLine two"
+    ```
+    
+    or within a compose file
+    
+    ```yaml
+          MOTD: |
+            line one
+            line two
+    # or
+    #      MOTD: "line one\nline two"
+    ```
 
 !!! tip
 

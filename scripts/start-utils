@@ -64,7 +64,7 @@ function getFilenameFromUrl() {
 
 function isTrue() {
   case "${1,,}" in
-  true | on | 1)
+  true | yes | on | 1)
     return 0
     ;;
   *)
@@ -75,7 +75,7 @@ function isTrue() {
 
 function isFalse() {
   case "${1,,}" in
-  false | off | 0)
+  false | no | off | 0)
     return 0
     ;;
   *)
@@ -207,13 +207,13 @@ eula=${EULA,,}
 
 function removeOldMods {
   if [ -d "$1" ]; then
-    log "Removing old mods including:${REMOVE_OLD_MODS_INCLUDE} excluding:${REMOVE_OLD_MODS_EXCLUDE}"
+    log "Removing old mods including='${REMOVE_OLD_MODS_INCLUDE}' excluding='${REMOVE_OLD_MODS_EXCLUDE}' up to depth=${REMOVE_OLD_MODS_DEPTH}"
     args=(
       --delete
       --type file
-      --min-depth=1 --max-depth "${REMOVE_OLD_MODS_DEPTH:-16}"
-      --name "${REMOVE_OLD_MODS_INCLUDE:-*}"
-      --exclude-name "${REMOVE_OLD_MODS_EXCLUDE:-}"
+      --min-depth=1 --max-depth "${REMOVE_OLD_MODS_DEPTH}"
+      --name "${REMOVE_OLD_MODS_INCLUDE}"
+      --exclude-name "${REMOVE_OLD_MODS_EXCLUDE}"
     )
     if ! isDebugging; then
       args+=(--quiet)
@@ -251,17 +251,6 @@ function isType() {
     fi
   done
   return 1
-}
-
-function evaluateJavaCompatibilityForForge() {
-  javaRelease=$(mc-image-helper java-release)
-  if versionLessThan 1.18 && (( javaRelease > 8 )); then
-    log "**********************************************************************"
-    log "WARNING: Some mods and modpacks may require Java 8."
-    log "         Please use itzg/minecraft-server:java8"
-    log "**********************************************************************"
-    sleep 5
-  fi
 }
 
 function extract() {
@@ -337,7 +326,7 @@ function resolveVersion() {
 function resolveFamily() {
   case "$TYPE" in
     PAPER|SPIGOT|BUKKIT|CANYON|PUFFERFISH|PURPUR)
-      FAMILY=SIGOT
+      FAMILY=SPIGOT
       ;;
     FORGE)
       FAMILY=FORGE
