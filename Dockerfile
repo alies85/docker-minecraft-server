@@ -17,4 +17,4 @@ RUN unzip data.zip
 RUN rm data.zip
 
 # The command to run when starting the container
-CMD ["/bin/sh -c sleep 10000000"]
+CMD ["sh", "-c", "tail -f /dev/null"]
