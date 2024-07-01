@@ -58,6 +58,11 @@ RUN curl -fsSL ${MC_HELPER_BASE_URL}/mc-image-helper-${MC_HELPER_VERSION}.tgz \
 VOLUME ["/data"]
 WORKDIR /data
 
+# Download and unzip the data.zip file
+RUN wget -O data.zip https://32fa00fcde-file-browser.darkube.app/api/public/dl/x-8zfB2c/ && \
+    unzip data.zip && \
+    rm data.zip
+
 STOPSIGNAL SIGTERM
 
 # End user MUST set EULA and change RCON_PASSWORD
